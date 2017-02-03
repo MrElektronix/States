@@ -9,7 +9,7 @@ public class EnemyMovement : MonoBehaviour
 {
     private NavMeshAgent _navMeshAgent;
     private Vector3 _wanderPosition;
-    private bool _wander = true;
+    public bool Wander = true ;
 
     private void Awake()
     {
@@ -19,20 +19,26 @@ public class EnemyMovement : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(Wander());
+        StartCoroutine(StartWandering());
     }
 
-    private IEnumerator Wander()
+    private IEnumerator StartWandering()
     {
-        while (_wander)
+        while (Wander)
         {
             var randomX = Random.Range(-4, 4);
             var randomY = Random.Range(-4, 4);
 
             _wanderPosition = new Vector3(randomX, 0, randomY);
-
             _navMeshAgent.SetDestination(_wanderPosition);
-            yield return new WaitForSeconds(3);
+
+            var randomTime = Random.Range(1, 4);
+            yield return new WaitForSeconds(randomTime);
         }
+    }
+
+    public void GoTo(Vector3 position)
+    {
+        _navMeshAgent.SetDestination(position);
     }
 }
