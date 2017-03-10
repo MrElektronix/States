@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     enum State { WANDER,
+                 GOTO,
                  ATTACK };
 
     private State _currentState;
@@ -21,23 +22,31 @@ public class Enemy : MonoBehaviour
     {
         switch (_currentState)
         {
-            case State.ATTACK:
+            case State.GOTO:
                 _enemyMovement.Wander = false;
                 _enemyMovement.GoTo(_currentTarget.position);
-
                 break;
             case State.WANDER:
                 _enemyMovement.Wander = true;
-
+                break;
+            case State.ATTACK:
                 break;
         }
     }
 
-    public void Attack(Transform target)
+    public void Wander()
     {
-        //If the enemy has an enemy in his sight
+        _currentState = State.WANDER;
+    }
 
-        _currentState = State.ATTACK;
+    public void GoTo(Transform target)
+    {
+        _currentState = State.GOTO;
         _currentTarget = target;
+    }
+
+    public void Attack()
+    {
+        _currentState = State.ATTACK;
     }
 }
